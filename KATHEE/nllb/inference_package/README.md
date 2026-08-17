@@ -23,11 +23,7 @@ inference_package/
 
 ```
 
-If you copy `translate.py` elsewhere, either bring the `adapters/`
-           python -u translate.py \
-            --input smoke.csv \
-            --output smoke_out.csv \
-            --adapter-dir /nllb/ckpt/ \
+
  folder
 along with it or pass `--adapter-dir /path/to/adapters` pointing at a
 directory containing both subfolders above. Each adapter folder is a
@@ -40,7 +36,10 @@ on first run.
 
 ```bash
 # Reproduces the submitted system (ensemble of both adapters)
-python translate.py --input dev.csv --output preds.csv
+           python -u translate.py \
+            --input dummy.csv \ 
+            --output dummy.csv \ 
+            --adapter-dir /nllb/ckpt/  
 
 
 ```
