@@ -71,7 +71,7 @@ and writes `work/bpcc_clean.parquet`.
 
 ### bignew
 
-<!-- TODO: source, size, licence, and how it was collected -->
+The bignew dataset was sourced from https://huggingface.co/datasets/SMUQamar/Kashmiri-English-Parallel-Corpus/tree/main
 
 Expected at `work/train_split_bignew.parquet` with `en` and `ks` columns.
 
