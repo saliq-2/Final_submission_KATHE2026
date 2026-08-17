@@ -3,6 +3,10 @@
 Translates English text to Kashmiri (`kas_Arab`) using two LoRA adapters
 fine-tuned on top of NLLB-200. This reproduces the submitted system.
 
+> **Get this via `git clone`, not GitHub's "Download ZIP" button.**
+> `adapters/` below is a symlink into the repo's `ckpt/` folder, and GitHub's
+> zip export does not reliably preserve it as a working directory link.
+
 ## Setup
 
 ```bash
