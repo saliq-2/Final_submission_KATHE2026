@@ -1,4 +1,5 @@
 # English → Kashmiri MT (NLLB-200 + LoRA)
+Note: Clone the repo dont use download as zip
 
 LoRA fine-tuning of NLLB-200 for English → Kashmiri (`kas_Arab`), with a
 cross-model reranking ensemble at inference.
