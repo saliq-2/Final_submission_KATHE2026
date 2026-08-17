@@ -1,0 +1,9 @@
+# Minimal set needed to run translate.py. Versions match what the
+# submitted system was trained and evaluated with.
+torch==2.5.1
+transformers==4.44.2
+peft==0.20.0
+accelerate==1.14.0
+safetensors==0.8.0
+sentencepiece==0.2.2
+pandas==2.3.3
