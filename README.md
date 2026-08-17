@@ -180,8 +180,8 @@ Please use this file for running the final evaluation of the model
 cd KATHEE/nllb/inference_package/
 
 python -u translate.py \
-            --input smoke.csv \ #dummy input
-            --output smoke_out.csv \ #dummy output
+            --input smoke.csv \ 
+            --output smoke_out.csv \ 
             --adapter-dir /KATHEE/nllb/ckpt 
 
 The adapters are at the location KATHEE/nllb/ckpt            
