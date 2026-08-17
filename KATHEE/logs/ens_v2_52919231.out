@@ -1,0 +1,230 @@
+Sender: LSF System <lsfadmin@aih-superl40s-01>
+Subject: Job 52919231: <ensemble-v2> in cluster <DKFZ> Done
+
+Job <ensemble-v2> was submitted from host <odcf-worker02.dkfz-heidelberg.de> by user <s124z> in cluster <DKFZ> at Sat Aug 15 22:43:05 2026
+Job was executed on host(s) <aih-superl40s-01>, in queue <gpu-pro>, as user <s124z> in cluster <DKFZ> at Sat Aug 15 22:43:07 2026
+</home/s124z> was used as the home directory.
+</home/s124z/KATHEE/nllb> was used as the working directory.
+Started at Sat Aug 15 22:43:07 2026
+Terminated at Sat Aug 15 22:49:10 2026
+Results reported at Sat Aug 15 22:49:10 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+bash -i -c '
+        . /home/s124z/env_scripts/kathe.sh &&
+        export HF_HOME=/dkfz/cluster/gpu/data/OE0176/s124z/hf_cache &&
+        export HF_HUB_OFFLINE=1 &&
+        cd /home/s124z/KATHEE/nllb &&
+        python -u ensemble_v2_more_pool.py
+    '
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   340.00 sec.
+    Max Memory :                                 8543 MB
+    Average Memory :                             3925.59 MB
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                40
+    Run time :                                   360 sec.
+    Turnaround time :                            365 sec.
+
+The output (if any) follows:
+
+bash: cannot set terminal process group (3569001): Inappropriate ioctl for device
+bash: no job control in this shell
+ERROR: Unable to locate a modulefile for 'cuda/12.1'
+/dkfz/cluster/gpu/data/OE0176/s124z/endo_conda_install/envs/KATHE/lib/python3.10/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+
+### generating with 1.3B (beam + diverse beam, K=16)
+gen 2/100
+gen 4/100
+gen 6/100
+gen 8/100
+gen 10/100
+gen 12/100
+gen 14/100
+gen 16/100
+gen 18/100
+gen 20/100
+gen 22/100
+gen 24/100
+gen 26/100
+gen 28/100
+gen 30/100
+gen 32/100
+gen 34/100
+gen 36/100
+gen 38/100
+gen 40/100
+gen 42/100
+gen 44/100
+gen 46/100
+gen 48/100
+gen 50/100
+gen 52/100
+gen 54/100
+gen 56/100
+gen 58/100
+gen 60/100
+gen 62/100
+gen 64/100
+gen 66/100
+gen 68/100
+gen 70/100
+gen 72/100
+gen 74/100
+gen 76/100
+gen 78/100
+gen 80/100
+gen 82/100
+gen 84/100
+gen 86/100
+gen 88/100
+gen 90/100
+gen 92/100
+gen 94/100
+gen 96/100
+gen 98/100
+gen 100/100
+
+### generating with 3.3B (beam + diverse beam, K=16)
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:24<00:49, 24.77s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:54<00:27, 27.84s/it]Loading checkpoint shards: 100%|██████████| 3/3 [01:01<00:00, 18.28s/it]Loading checkpoint shards: 100%|██████████| 3/3 [01:01<00:00, 20.55s/it]
+gen 2/100
+gen 4/100
+gen 6/100
+gen 8/100
+gen 10/100
+gen 12/100
+gen 14/100
+gen 16/100
+gen 18/100
+gen 20/100
+gen 22/100
+gen 24/100
+gen 26/100
+gen 28/100
+gen 30/100
+gen 32/100
+gen 34/100
+gen 36/100
+gen 38/100
+gen 40/100
+gen 42/100
+gen 44/100
+gen 46/100
+gen 48/100
+gen 50/100
+gen 52/100
+gen 54/100
+gen 56/100
+gen 58/100
+gen 60/100
+gen 62/100
+gen 64/100
+gen 66/100
+gen 68/100
+gen 70/100
+gen 72/100
+gen 74/100
+gen 76/100
+gen 78/100
+gen 80/100
+gen 82/100
+gen 84/100
+gen 86/100
+gen 88/100
+gen 90/100
+gen 92/100
+gen 94/100
+gen 96/100
+gen 98/100
+gen 100/100
+cached candidates to /home/s124z/KATHEE/nllb/eval_out/gt100_nbest_cache_v2.json
+pooled: mean 50.3 candidates/sentence (min 30, max 60)
+5032 candidates to score under each model
+
+### scoring under 1.3B
+score 16/5032
+score 336/5032
+score 656/5032
+score 976/5032
+score 1296/5032
+score 1616/5032
+score 1936/5032
+score 2256/5032
+score 2576/5032
+score 2896/5032
+score 3216/5032
+score 3536/5032
+score 3856/5032
+score 4176/5032
+score 4496/5032
+score 4816/5032
+
+### scoring under 3.3B
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:02<00:05,  2.78s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:06<00:03,  3.54s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:07<00:00,  2.22s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:07<00:00,  2.50s/it]
+score 16/5032
+score 336/5032
+score 656/5032
+score 976/5032
+score 1296/5032
+score 1616/5032
+score 1936/5032
+score 2256/5032
+score 2576/5032
+score 2896/5032
+score 3216/5032
+score 3536/5032
+score 3856/5032
+score 4176/5032
+score 4496/5032
+score 4816/5032
+
+=== 1.3B alone (plain beam-1) ===
+{'bleu': 12.21448247069573, 'chrf++': 41.161300311265364, 'geo_mean': 22.422399093830112, 'length_ratio': 0.983448275862069}
+
+=== 3.3B alone (plain beam-1) ===
+{'bleu': 13.495715064255974, 'chrf++': 42.97608095416499, 'geo_mean': 24.083042646970682, 'length_ratio': 0.9820689655172414}
+
+w=0.0 lennorm=0.6 -> geo_mean=24.23 bleu=13.75 chrf++=42.69 changed=92%
+w=0.0 lennorm=0.8 -> geo_mean=23.81 bleu=13.35 chrf++=42.46 changed=92%
+w=0.0 lennorm=1.0 -> geo_mean=24.14 bleu=13.52 chrf++=43.08 changed=92%
+w=0.2 lennorm=0.6 -> geo_mean=26.62 bleu=15.64 chrf++=45.30 changed=90%
+w=0.2 lennorm=0.8 -> geo_mean=26.42 bleu=15.51 chrf++=45.01 changed=90%
+w=0.2 lennorm=1.0 -> geo_mean=26.55 bleu=15.52 chrf++=45.42 changed=90%
+w=0.3 lennorm=0.6 -> geo_mean=25.61 bleu=14.65 chrf++=44.76 changed=87%
+w=0.3 lennorm=0.8 -> geo_mean=25.87 bleu=14.85 chrf++=45.07 changed=87%
+w=0.3 lennorm=1.0 -> geo_mean=26.59 bleu=15.44 chrf++=45.78 changed=87%
+w=0.4 lennorm=0.6 -> geo_mean=25.85 bleu=14.81 chrf++=45.11 changed=84%
+w=0.4 lennorm=0.8 -> geo_mean=25.98 bleu=14.92 chrf++=45.25 changed=84%
+w=0.4 lennorm=1.0 -> geo_mean=26.04 bleu=14.95 chrf++=45.35 changed=83%
+w=0.5 lennorm=0.6 -> geo_mean=25.67 bleu=14.85 chrf++=44.39 changed=79%
+w=0.5 lennorm=0.8 -> geo_mean=25.89 bleu=14.99 chrf++=44.70 changed=77%
+w=0.5 lennorm=1.0 -> geo_mean=25.92 bleu=14.98 chrf++=44.85 changed=77%
+w=0.6 lennorm=0.6 -> geo_mean=25.64 bleu=14.80 chrf++=44.44 changed=73%
+w=0.6 lennorm=0.8 -> geo_mean=25.69 bleu=14.81 chrf++=44.56 changed=73%
+w=0.6 lennorm=1.0 -> geo_mean=26.15 bleu=15.13 chrf++=45.19 changed=73%
+w=0.7 lennorm=0.6 -> geo_mean=25.74 bleu=14.92 chrf++=44.38 changed=66%
+w=0.7 lennorm=0.8 -> geo_mean=25.73 bleu=14.89 chrf++=44.46 changed=67%
+w=0.7 lennorm=1.0 -> geo_mean=25.68 bleu=14.86 chrf++=44.37 changed=67%
+w=0.8 lennorm=0.6 -> geo_mean=24.66 bleu=13.92 chrf++=43.68 changed=52%
+w=0.8 lennorm=0.8 -> geo_mean=25.66 bleu=14.89 chrf++=44.21 changed=53%
+w=0.8 lennorm=1.0 -> geo_mean=25.60 bleu=14.82 chrf++=44.24 changed=54%
+w=1.0 lennorm=0.6 -> geo_mean=22.47 bleu=12.28 chrf++=41.09 changed=19%
+w=1.0 lennorm=0.8 -> geo_mean=22.52 bleu=12.27 chrf++=41.33 changed=14%
+w=1.0 lennorm=1.0 -> geo_mean=22.23 bleu=12.06 chrf++=40.97 changed=5%
+
+=== best: w=0.2 lennorm=0.6 ===
+{'bleu': 15.64323784925918, 'chrf++': 45.304359449484785, 'geo_mean': 26.62154898717622, 'length_ratio': 0.9696551724137931}
+
+wrote /home/s124z/KATHEE/nllb/eval_out/ensemble_v2_scores.json

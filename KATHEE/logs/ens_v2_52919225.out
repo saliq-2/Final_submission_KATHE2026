@@ -1,0 +1,45 @@
+Sender: LSF System <lsfadmin@aih-superl40s-04>
+Subject: Job 52919225: <ensemble-v2> in cluster <DKFZ> Exited
+
+Job <ensemble-v2> was submitted from host <odcf-worker02.dkfz-heidelberg.de> by user <s124z> in cluster <DKFZ> at Sat Aug 15 22:37:40 2026
+Job was executed on host(s) <aih-superl40s-04>, in queue <gpu-pro>, as user <s124z> in cluster <DKFZ> at Sat Aug 15 22:37:41 2026
+</home/s124z> was used as the home directory.
+</home/s124z/KATHEE/nllb> was used as the working directory.
+Started at Sat Aug 15 22:37:41 2026
+Terminated at Sat Aug 15 22:38:02 2026
+Results reported at Sat Aug 15 22:38:02 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+bash -i -c '
+        . /home/s124z/env_scripts/kathe.sh &&
+        export HF_HOME=/dkfz/cluster/gpu/data/OE0176/s124z/hf_cache &&
+        export HF_HUB_OFFLINE=1 &&
+        cd /home/s124z/KATHEE/nllb &&
+        python -u ensemble_nllb_v2_more_pool.py
+    '
+------------------------------------------------------------
+
+Exited with exit code 2.
+
+Resource usage summary:
+
+    CPU time :                                   1.07 sec.
+    Max Memory :                                 11 MB
+    Average Memory :                             8.00 MB
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                7
+    Run time :                                   18 sec.
+    Turnaround time :                            22 sec.
+
+The output (if any) follows:
+
+bash: cannot set terminal process group (598560): Inappropriate ioctl for device
+bash: no job control in this shell
+ERROR: Unable to locate a modulefile for 'cuda/12.1'
+python: can't open file '/home/s124z/KATHEE/nllb/ensemble_nllb_v2_more_pool.py': [Errno 2] No such file or directory

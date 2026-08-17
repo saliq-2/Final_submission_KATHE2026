@@ -1,0 +1,101 @@
+Sender: LSF System <lsfadmin@fse-superl40s-02>
+Subject: Job 52917194: <eval-nllb-1.3B> in cluster <DKFZ> Done
+
+Job <eval-nllb-1.3B> was submitted from host <odcf-worker02.dkfz-heidelberg.de> by user <s124z> in cluster <DKFZ> at Sat Aug 15 12:16:17 2026
+Job was executed on host(s) <fse-superl40s-02>, in queue <gpu-pro>, as user <s124z> in cluster <DKFZ> at Sat Aug 15 12:16:17 2026
+</home/s124z> was used as the home directory.
+</home/s124z/KATHEE/nllb/ckpt> was used as the working directory.
+Started at Sat Aug 15 12:16:17 2026
+Terminated at Sat Aug 15 12:19:14 2026
+Results reported at Sat Aug 15 12:19:14 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+bash -i -c '
+        . /home/s124z/env_scripts/kathe.sh &&
+        export HF_HOME=/dkfz/cluster/gpu/data/OE0176/s124z/hf_cache &&
+        export HF_HUB_OFFLINE=1 &&
+        cd /home/s124z/KATHEE/nllb &&
+        python -u eval_nllb.py --combined --model 3.3b
+    '
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   121.00 sec.
+    Max Memory :                                 6857 MB
+    Average Memory :                             2870.15 MB
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                42
+    Run time :                                   174 sec.
+    Turnaround time :                            177 sec.
+
+The output (if any) follows:
+
+bash: cannot set terminal process group (2799474): Inappropriate ioctl for device
+bash: no job control in this shell
+ERROR: Unable to locate a modulefile for 'cuda/12.1'
+comparing NLLB-LoRA (best_adapter_nllb_combined_3.3B) vs IndicTrans2 champion (best_adapter_newdata_clean)
+/dkfz/cluster/gpu/data/OE0176/s124z/endo_conda_install/envs/KATHE/lib/python3.10/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:22<00:44, 22.40s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:48<00:24, 24.74s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:55<00:00, 16.37s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:55<00:00, 18.40s/it]
+=== raw NLLB-LoRA output (no restoration) ===
+{'bleu': 13.549491315421713, 'chrf++': 43.18649015111787, 'geo_mean': 24.189976710326054, 'length_ratio': 0.983448275862069}
+output density: 0.17297162767546043
+gold density: 0.165264720435428
+/home/s124z/KATHEE/eval_diacritizer.py:34: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model.load_state_dict(torch.load(DIACRITIZER_DIR / f"model_{variant}.pt", map_location=device))
+/dkfz/cluster/gpu/data/OE0176/s124z/endo_conda_install/envs/KATHE/lib/python3.10/site-packages/torch/nn/modules/transformer.py:502: UserWarning: The PyTorch API of nested tensors is in prototype stage and will change in the near future. (Triggered internally at ../aten/src/ATen/NestedTensorImpl.cpp:178.)
+  output = torch._nested_tensor_from_mask(
+
+=== + confidence-gated hybrid restoration (champion's pipeline) ===
+{'bleu': 8.935766480503306, 'chrf++': 36.07688920675026, 'geo_mean': 17.954794827413387, 'length_ratio': 0.983448275862069}
+(restoration is calibrated for IndicTrans2's under-diacritization pattern --
+ NLLB's raw density is already above gold, so compare both configs below)
+
+=== IndicTrans2 champion (best_adapter_newdata_clean) for comparison ===
+{'bleu': 5.678814925896375, 'chrf++': 31.082725081097713, 'geo_mean': 13.285821131118366, 'length_ratio': 1.0151724137931035}
+
+paired bootstrap (NLLB+restoration vs champion): mean_delta=4.785 CI=[0.992,8.664] P(nllb-lora>champion)=0.995
+paired bootstrap (NLLB raw, no restoration, vs champion): mean_delta=10.951 CI=[6.484,15.706] P(nllb-lora>champion)=1.000
+
+=== sample outputs (raw, no restoration -- NLLB's best config) ===
+EN : She is five feet tall.
+OUT: سۄ چھےٚ پانٛژ فُٹ زیٖٹھ۔
+REF: سۄ چھےٚ پانٛژ ھ فُٹہٕ تٔھز۔
+
+EN : We went there on his death anniversary.
+OUT: أسۍ گٔیہٕ تور تٔمۍ سٕنٛدِس مرنٕکِس وۄہرس پٮ۪ٹھ۔
+REF: أسۍ ٲسۍ تٔمۍ سٕنٛزِ وہروارِ پیٚٹھ تور گٔمٕتۍ۔
+
+EN : They have programmed the list and you are the first to speak.
+OUT: تِمو چُھ فہرست پروگرام کوٚرمُت تہٕ تُہۍ چِھو گۄڈٕنیُک بولن وول۔
+REF: تِمو چُھ پروگرام کہِ فہرستٕچ منصوبہ بندی کٔرمٕژ تہٕ ژےٚ چُھی گۄڈٕ بولُن۔
+
+EN : You should refrain from engaging in acts of stupidity.
+OUT: تۄہہِ پَزٮ۪و بیوقوٗفی ہِنٛزن حرکتن منٛز شُروٗع گژھنہٕ نِش پرہیز کرُن۔
+REF: تۄہہِ پَزیو بیقلٲزی ہِنٛزن کامیٚن منٛز ملوث گژھنہٕ نِش بچُن
+
+EN : I have to load the software.
+OUT: مےٚ چُھ سافٹ ویئر لوڈ کرُن۔
+REF: مےٚ چُھ سافٹ وِیر کھالُن۔
+
+EN : His words carry double meanings.
+OUT: تٔمۍ سٕنٛزو لفظَو چُھ زٕ معنی۔
+REF: تٔمۍ سٕنٛدیٚن لفظن چھِ زٕ معنی۔
+
+EN : The sky was full of clouds.
+OUT: آسمان اوس اوٚبرٕ سۭتۍ بٔرِتھ۔
+REF: اسمان اوس اوٚبرٕ سۭتۍ بٔرِتھ
+
+EN : Life is short and time is swift.
+OUT: زِنٛدگی چھےٚ کم تہٕ وقت چُھ تیز۔
+REF: زِنٛٛدگی چھےٚ مۄختصر تہٕ وقت چُھ تیز نیرن وول۔
+

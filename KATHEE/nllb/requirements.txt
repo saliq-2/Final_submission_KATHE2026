@@ -1,0 +1,27 @@
+# Pinned to what's installed and verified working in the local `kathe`
+# conda env (Python 3.10.20). transformers is pinned deliberately --
+# 5.x breaks IndicTrans2's trust_remote_code model loading, which
+# ground_truth_eval.py pulls in transitively (via translate.py) even
+# though NLLB itself doesn't need IndicTrans2.
+torch==2.5.1
+transformers==4.44.2
+peft==0.20.0
+accelerate==1.14.0
+datasets==5.0.1
+tokenizers==0.19.1
+safetensors==0.8.0
+
+pandas==2.3.3
+pyarrow==25.0.0
+numpy==2.2.6
+scipy==1.15.3
+openpyxl==3.1.5        # reads Evaluation_Set_With_ChatGPT_Translations.xlsx
+sacrebleu==2.4.3        # BLEU/chrF++ in metric.py
+sentencepiece==0.2.2
+
+wandb==0.28.1
+
+# IndicTransToolkit is NOT on PyPI in this locally-patched form (has a
+# currency-placeholder regex fix not in upstream) -- install after syncing
+# the folder, from the synced copy:
+#   pip install -e IndicTransToolkit/

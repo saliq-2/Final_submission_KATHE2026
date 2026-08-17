@@ -1,0 +1,44 @@
+Sender: LSF System <lsfadmin@b260-superh200-01>
+Subject: Job 52885853: <RUN_2_2026KATHE> in cluster <DKFZ> Exited
+
+Job <RUN_2_2026KATHE> was submitted from host <odcf-worker02.dkfz-heidelberg.de> by user <s124z> in cluster <DKFZ> at Thu Aug 13 15:07:16 2026
+Job was executed on host(s) <b260-superh200-01>, in queue <gpu-pro>, as user <s124z> in cluster <DKFZ> at Thu Aug 13 15:09:57 2026
+</home/s124z> was used as the home directory.
+</home/s124z> was used as the working directory.
+Started at Thu Aug 13 15:09:57 2026
+Terminated at Thu Aug 13 15:21:44 2026
+Results reported at Thu Aug 13 15:21:44 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+bash -c '
+        . /home/s124z/env_scripts/kathe.sh &&
+        export HF_HOME=/dkfz/cluster/gpu/data/OE0176/s124z/hf_cache &&
+        export HF_HUB_OFFLINE=1 &&
+        export WANDB_API_KEY=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 &&
+        export WANDB_PROJECT=kathe-nllb &&
+        cd /home/s124z/KATHEE/nllb &&
+        python -u finetune_nllb.py             --combined             --model 1.3b             --epochs 10             --batch-size 12
+    '
+------------------------------------------------------------
+
+TERM_OWNER: job killed by owner.
+Exited with signal termination: 12.
+
+Resource usage summary:
+
+    CPU time :                                   0.39 sec.
+    Max Memory :                                 6 MB
+    Average Memory :                             6.00 MB
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              1
+    Max Threads :                                1
+    Run time :                                   0 sec.
+    Turnaround time :                            868 sec.
+
+The output (if any) follows:
+

@@ -1,0 +1,43 @@
+Sender: LSF System <lsfadmin@b260-superh200-01>
+Subject: Job 52885830: <RUN_2_2026KATHE> in cluster <DKFZ> Exited
+
+Job <RUN_2_2026KATHE> was submitted from host <odcf-worker02.dkfz-heidelberg.de> by user <s124z> in cluster <DKFZ> at Thu Aug 13 15:00:02 2026
+Job was executed on host(s) <b260-superh200-01>, in queue <gpu-pro>, as user <s124z> in cluster <DKFZ> at Thu Aug 13 15:00:32 2026
+</home/s124z> was used as the home directory.
+</home/s124z> was used as the working directory.
+Started at Thu Aug 13 15:00:32 2026
+Terminated at Thu Aug 13 15:09:56 2026
+Results reported at Thu Aug 13 15:09:56 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+bash -c '
+        . /home/s124z/env_scripts/kathe.sh &&
+        export HF_HOME=/dkfz/cluster/gpu/data/OE0176/s124z/hf_cache &&
+        export HF_HUB_OFFLINE=1 &&
+        export WANDB_MODE=offline &&
+        cd /home/s124z/KATHEE/nllb &&
+        python -u finetune_nllb.py             --combined             --model 1.3b             --epochs 10             --batch-size 12
+    '
+------------------------------------------------------------
+
+TERM_OWNER: job killed by owner.
+Exited with signal termination: 12.
+
+Resource usage summary:
+
+    CPU time :                                   0.39 sec.
+    Max Memory :                                 9 MB
+    Average Memory :                             6.75 MB
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              1
+    Max Threads :                                1
+    Run time :                                   0 sec.
+    Turnaround time :                            594 sec.
+
+The output (if any) follows:
+

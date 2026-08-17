@@ -1,0 +1,50 @@
+Sender: LSF System <lsfadmin@aih-superl40s-05>
+Subject: Job 52900338: <eval-nllb-1.3B> in cluster <DKFZ> Exited
+
+Job <eval-nllb-1.3B> was submitted from host <odcf-worker02.dkfz-heidelberg.de> by user <s124z> in cluster <DKFZ> at Fri Aug 14 10:56:17 2026
+Job was executed on host(s) <aih-superl40s-05>, in queue <gpu-pro>, as user <s124z> in cluster <DKFZ> at Fri Aug 14 10:56:17 2026
+</home/s124z> was used as the home directory.
+</home/s124z> was used as the working directory.
+Started at Fri Aug 14 10:56:17 2026
+Terminated at Fri Aug 14 10:56:50 2026
+Results reported at Fri Aug 14 10:56:50 2026
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+bash -i -c '
+        . /home/s124z/env_scripts/kathe.sh &&
+        export HF_HOME=/dkfz/cluster/gpu/data/OE0176/s124z/hf_cache &&
+        export HF_HUB_OFFLINE=1 &&
+        cd /home/s124z/KATHEE/nllb &&
+        python -u eval_nllb.py --combined --model 1.3b
+    '
+------------------------------------------------------------
+
+Exited with exit code 1.
+
+Resource usage summary:
+
+    CPU time :                                   5.00 sec.
+    Max Memory :                                 302 MB
+    Average Memory :                             157.00 MB
+    Total Requested Memory :                     -
+    Delta Memory :                               -
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                8
+    Run time :                                   30 sec.
+    Turnaround time :                            33 sec.
+
+The output (if any) follows:
+
+bash: cannot set terminal process group (595299): Inappropriate ioctl for device
+bash: no job control in this shell
+ERROR: Unable to locate a modulefile for 'cuda/12.1'
+Traceback (most recent call last):
+  File "/home/s124z/KATHEE/nllb/eval_nllb.py", line 14, in <module>
+    from diacritizer_gated import hybrid_restore_gated
+  File "/home/s124z/KATHEE/diacritizer_gated.py", line 5, in <module>
+    from diacritizer_apply import _get_model
+ModuleNotFoundError: No module named 'diacritizer_apply'
