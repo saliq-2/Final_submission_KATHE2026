@@ -1,0 +1,241 @@
+# English → Kashmiri MT (NLLB-200 + LoRA)
+
+LoRA fine-tuning of NLLB-200 for English → Kashmiri (`kas_Arab`), with a
+cross-model reranking ensemble at inference.
+
+## Requirements
+
+Python 3.10, one CUDA GPU. Memory depends on which model you train:
+
+| Model | GPU memory | Notes |
+|---|---|---|
+| `distilled-600M` | ~16 GB | |
+| `1.3B` | ~24 GB | batch size 12 |
+| `3.3B` | ~40 GB | batch size 6 |
+
+```bash
+conda create -n kashmiri python=3.10 -y
+conda activate kashmiri
+pip install -r requirements.txt
+```
+
+The `torch==2.5.1` / `peft==0.20.0` pin matters. On this pairing PEFT's DTensor
+check reads `torch.distributed.tensor`, which torch 2.5 does not bind eagerly,
+so `get_peft_model` raises `AttributeError`. The training script imports the
+submodule explicitly to work around it. Upgrading torch to ≥2.6 or downgrading
+PEFT to <0.15 also resolves it.
+
+## Layout
+
+```
+config.py                    shared paths and constants
+prepare_combined.py          builds the combined training mix
+metric.py                    scoring (BLEU, chrF++, geometric mean)
+ground_truth_eval.py         loads the held-out reference set
+nllb/
+  nllb_common.py             --model alias resolution, model tags
+  finetune_nllb.py           LoRA training
+  eval_nllb_nodiac.py        evaluation vs the reference set
+  ensemble_nllb.py           tunes the ensemble weights
+  make_dev_submission_ensemble.py   writes a submission CSV
+  data/                      train_combined.parquet, val_combined.parquet
+  ckpt/                      adapters and checkpoints (created)
+work/                        intermediate parquets and outputs (created)
+```
+
+`config.py` derives every path from its own location, so the repo runs from
+wherever it is cloned. `DATA_DIR`, `WORK_DIR`, and `CKPT_DIR` are created on
+import.
+
+## Datasets
+
+Training data is not distributed with the repo. Three parallel English–Kashmiri
+sources are combined.
+
+### BPCC
+
+The bulk of the data. Bharat Parallel Corpus Collection, from the Hugging Face
+Hub:
+
+- Dataset: [`ai4bharat/BPCC`](https://huggingface.co/datasets/ai4bharat/BPCC)
+- File: `bpcc-seed-latest/kas_Arab.tsv`
+
+```bash
+huggingface-cli download ai4bharat/BPCC \
+    bpcc-seed-latest/kas_Arab.tsv \
+    --repo-type dataset --local-dir data/
+```
+
+`clean_bpcc.py` runs a repair pass over it for encoding and alignment problems
+and writes `work/bpcc_clean.parquet`.
+
+### bignew
+
+<!-- TODO: source, size, licence, and how it was collected -->
+
+Expected at `work/train_split_bignew.parquet` with `en` and `ks` columns.
+
+### Register-matched subset
+
+A smaller, cleaner corpus much closer in register to the target domain.
+Oversampled in the combined mix so it is not drowned out by BPCC.
+
+<!-- TODO: source, size, licence, and how it was cleaned and filtered -->
+
+Expected at `work/train_split_newdata_clean.parquet` with `en` and `ks` columns.
+
+### Building the mix
+
+```bash
+python clean_bpcc.py          # repair pass, writes work/bpcc_clean.parquet
+python prepare_combined.py    # builds nllb/data/train_combined.parquet
+```
+
+`prepare_combined.py` concatenates the three sources and oversamples the
+register-matched subset; the ratio and oversampling factor are set at the top of
+that script.
+
+### Evaluation data
+
+The held-out reference set used by `eval_nllb_nodiac.py` is loaded by
+`ground_truth_eval.py`.
+
+<!-- TODO: source and size of the reference set; note whether it is redistributable -->
+
+Other training branches use different splits — `--bpcc` reads
+`work/train_split.parquet`, and the default branch reads
+`work/train_split_newdata_clean.parquet`. All split paths are defined in
+`config.py`.
+
+Verify before training:
+
+```bash
+python -c "
+import pandas as pd
+for f in ('nllb/data/train_combined.parquet', 'nllb/data/val_combined.parquet'):
+    d = pd.read_parquet(f)
+    print(f, len(d), list(d.columns))
+"
+```
+
+Both need `en` and `ks` columns.
+
+## Training
+
+```bash
+python -u nllb/finetune_nllb.py --combined --model 1.3b --epochs 10 --batch-size 12
+```
+
+| Flag | Effect |
+|---|---|
+| `--combined` | the combined mix (default 6 epochs) |
+| `--bpcc` | BPCC only (default 3 epochs) |
+| *(neither)* | register-matched subset only (default 15 epochs) |
+| `--model` | `600m`, `1.3b`, `3.3b`, or any NLLB hub id |
+| `--epochs` | overrides the branch default |
+| `--batch-size` | overrides the per-model default; grad accumulation adjusts to hold the effective batch near 32 |
+
+Checkpoints land in `nllb/ckpt/combined_lora_<TAG>/`, capped at 3. The final
+adapter is written to `nllb/ckpt/best_adapter_nllb_combined_<TAG>/`.
+
+Train both sizes — the ensemble needs both:
+
+```bash
+python -u nllb/finetune_nllb.py --combined --model 1.3b --epochs 10 --batch-size 12
+python -u nllb/finetune_nllb.py --combined --model 3.3b --epochs 10 --batch-size 6
+```
+
+Weights & Biases logging is on by default via `report_to="wandb"`. Run
+`wandb login` first, or set `WANDB_MODE=offline` (and `wandb sync` later) if the
+training node has no outbound network.
+
+## Evaluation
+
+```bash
+python -u nllb/eval_nllb_nodiac.py --combined --model 1.3b
+```
+
+Writes scores and hypotheses to `nllb/eval_out/`. Reports BLEU, chrF++, and
+their geometric mean against the held-out reference set.
+
+Tune the ensemble weights once both adapters exist:
+
+```bash
+python -u nllb/ensemble_nllb.py
+```
+
+This sweeps the model weight `W` and the length-normalisation exponent and
+prints the best combination.
+
+The reference set is small, so sweeping many configurations against it will
+overfit. Validate on a held-out split before trusting a sub-point gain.
+
+## Inference
+
+```bash
+python -u nllb/make_dev_submission_ensemble.py
+```
+
+Reads `englishdev.csv` (columns `ID`, `sentence`) and writes
+`work/englishdev_submission_nllb_ensemble.csv` (columns `ID`, `kashmiri_text`).
+
+Generation is cached to `nllb/eval_out/dev_nbest_cache.json`, so re-running with
+different `W` / `LENNORM` skips the expensive phase. **Delete the cache** if you
+change `K`, the generation strategy, or the adapters — the staleness check only
+compares row counts.
+
+For inference on arbitrary input with trained adapters, use the standalone
+`translate.py`, which has no dependency on `config.py` or the rest of the repo:
+
+```bash
+python translate.py --input input.csv --output predictions.csv
+python translate.py --input input.csv --output predictions.csv --mode single
+```
+
+`--mode single` uses the 1.3B adapter alone: faster, lower memory, no candidate
+scoring. Run `python translate.py --help` for the full flag list.
+
+## Running on a cluster (LSF)
+
+```bash
+bsub -q gpu-pro -gpu "num=1:j_exclusive=yes:gmem=40GB" \
+     -J train-1.3b \
+     -o logs/%J.out \
+     "bash -l -c '
+        conda activate kashmiri &&
+        export HF_HOME=/path/to/hf_cache &&
+        export HF_HUB_OFFLINE=1 &&
+        cd /path/to/repo &&
+        python -u nllb/finetune_nllb.py --combined --model 1.3b --epochs 10 --batch-size 12 \
+            2>&1 | tee logs/\${LSB_JOBID}.live.log
+    '"
+```
+
+Two things that cost time to discover:
+
+**Pre-populate the HF cache from a node with internet.** Compute nodes often
+have no outbound network, and `from_pretrained` will retry against
+`huggingface.co` and fail. Download first, then set `HF_HUB_OFFLINE=1` so cached
+weights are used without an update check:
+
+```bash
+python -c "
+from huggingface_hub import snapshot_download
+for m in ('facebook/nllb-200-1.3B', 'facebook/nllb-200-3.3B'):
+    snapshot_download(m)
+"
+```
+
+**Pipe through `tee`.** LSF writes the `-o` file only when the job finishes, so
+there is nothing to `tail` during a run. `${LSB_JOBID}` is set inside the job,
+and `-u` keeps Python from buffering.
+
+## Notes
+
+Beam search is deterministic, but fp16 reductions are not bit-reproducible
+across GPU models, so candidates scoring within rounding error of each other can
+swap between runs. This affects a small fraction of outputs.
+
+`diacritizer_gated.py` imports `diacritizer_apply`, which is not in the repo.
+Anything touching the diacritic restoration pipeline — including the original
+`eval_nllb.py` — will fail on import. Use `eval_nllb_nodiac.py` instead.
