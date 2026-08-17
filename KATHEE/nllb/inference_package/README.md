@@ -39,7 +39,7 @@ on first run.
            python -u translate.py \
             --input dummy.csv \ 
             --output dummy.csv \ 
-            --adapter-dir /nllb/ckpt/  
+            --adapter-dir /nllb/ckpt  
 
 
 ```
