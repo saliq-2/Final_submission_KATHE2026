@@ -20,9 +20,7 @@ The adapters are included in this package under `adapters/` (a symlink to
 inference_package/
 ├── translate.py
 ├── requirements.txt
-└── adapters/
-    ├── best_adapter_nllb_combined_1.3B/
-    └── best_adapter_nllb_combined_3.3B/
+
 ```
 
 If you copy `translate.py` elsewhere, either bring the `adapters/`
