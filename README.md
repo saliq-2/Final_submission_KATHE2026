@@ -121,7 +121,7 @@ for f in ('nllb/data/train_combined.parquet', 'nllb/data/val_combined.parquet'):
 Both need `en` and `ks` columns.
 
 ## Training
-
+cd /KATHEE/nllb/
 ```bash
 python -u nllb/finetune_nllb.py --combined --model 1.3b --epochs 10 --batch-size 12
 ```
@@ -171,64 +171,28 @@ The reference set is small, so sweeping many configurations against it will
 overfit. Validate on a held-out split before trusting a sub-point gain.
 
 ## Inference
+Please use this file for running the final evaluation of the model
 
-```bash
-python -u nllb/make_dev_submission_ensemble.py
-```
 
-Reads `englishdev.csv` (columns `ID`, `sentence`) and writes
-`work/englishdev_submission_nllb_ensemble.csv` (columns `ID`, `kashmiri_text`).
 
-Generation is cached to `nllb/eval_out/dev_nbest_cache.json`, so re-running with
-different `W` / `LENNORM` skips the expensive phase. **Delete the cache** if you
-change `K`, the generation strategy, or the adapters — the staleness check only
-compares row counts.
+cd KATHEE/nllb/inference_package/
 
-For inference on arbitrary input with trained adapters, use the standalone
-`translate.py`, which has no dependency on `config.py` or the rest of the repo:
+python -u translate.py \
+            --input smoke.csv \ #dummy input
+            --output smoke_out.csv \ #dummy output
+            --adapter-dir /KATHEE/nllb/ckpt 
 
-```bash
-python translate.py --input input.csv --output predictions.csv
-python translate.py --input input.csv --output predictions.csv --mode single
-```
+The adapters are at the location KATHEE/nllb/ckpt            
 
-`--mode single` uses the 1.3B adapter alone: faster, lower memory, no candidate
-scoring. Run `python translate.py --help` for the full flag list.
+Then you can copy the output file to run against your own evaluation
 
-## Running on a cluster (LSF)
 
-```bash
-bsub -q gpu-pro -gpu "num=1:j_exclusive=yes:gmem=40GB" \
-     -J train-1.3b \
-     -o logs/%J.out \
-     "bash -l -c '
-        conda activate kashmiri &&
-        export HF_HOME=/path/to/hf_cache &&
-        export HF_HUB_OFFLINE=1 &&
-        cd /path/to/repo &&
-        python -u nllb/finetune_nllb.py --combined --model 1.3b --epochs 10 --batch-size 12 \
-            2>&1 | tee logs/\${LSB_JOBID}.live.log
-    '"
-```
 
-Two things that cost time to discover:
 
-**Pre-populate the HF cache from a node with internet.** Compute nodes often
-have no outbound network, and `from_pretrained` will retry against
-`huggingface.co` and fail. Download first, then set `HF_HUB_OFFLINE=1` so cached
-weights are used without an update check:
 
-```bash
-python -c "
-from huggingface_hub import snapshot_download
-for m in ('facebook/nllb-200-1.3B', 'facebook/nllb-200-3.3B'):
-    snapshot_download(m)
-"
-```
 
-**Pipe through `tee`.** LSF writes the `-o` file only when the job finishes, so
-there is nothing to `tail` during a run. `${LSB_JOBID}` is set inside the job,
-and `-u` keeps Python from buffering.
+
+
 
 ## Notes
 
