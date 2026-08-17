@@ -151,26 +151,6 @@ Weights & Biases logging is on by default via `report_to="wandb"`. Run
 `wandb login` first, or set `WANDB_MODE=offline` (and `wandb sync` later) if the
 training node has no outbound network.
 
-## Evaluation
-
-```bash
-python -u nllb/eval_nllb_nodiac.py --combined --model 1.3b
-```
-
-Writes scores and hypotheses to `nllb/eval_out/`. Reports BLEU, chrF++, and
-their geometric mean against the held-out reference set.
-
-Tune the ensemble weights once both adapters exist:
-
-```bash
-python -u nllb/ensemble_nllb.py
-```
-
-This sweeps the model weight `W` and the length-normalisation exponent and
-prints the best combination.
-
-The reference set is small, so sweeping many configurations against it will
-overfit. Validate on a held-out split before trusting a sub-point gain.
 
 ## Inference
 Please use this file for running the final evaluation of the model
@@ -186,7 +166,7 @@ python -u translate.py \
 
 The adapters are at the location KATHEE/nllb/ckpt            
 
-Then you can copy the output file to run against your own evaluation
+Then you can copy the output file to run against your own evaluation metric
 
 
 
