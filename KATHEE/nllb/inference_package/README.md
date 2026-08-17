@@ -27,7 +27,7 @@ If you copy `translate.py` elsewhere, either bring the `adapters/`
            python -u translate.py \
             --input smoke.csv \
             --output smoke_out.csv \
-            --adapter-dir /path_to_adapter \
+            --adapter-dir /nllb/ckpt/ \
  folder
 along with it or pass `--adapter-dir /path/to/adapters` pointing at a
 directory containing both subfolders above. Each adapter folder is a
