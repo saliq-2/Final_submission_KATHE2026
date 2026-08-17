@@ -27,7 +27,7 @@ submodule explicitly to work around it. Upgrading torch to ≥2.6 or downgrading
 PEFT to <0.15 also resolves it.
 
 ## Layout
-KATHEE
+KATHEE/
 ```
 config.py                    shared paths and constants
 prepare_combined.py          builds the combined training mix
