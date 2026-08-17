@@ -1,14 +1,15 @@
-# Minimal set needed to run translate.py. Versions match what the
-# submitted system was trained and evaluated with.
-torch==2.5.1
-transformers==4.44.2
-peft==0.20.0
-safetensors==0.8.0
-sentencepiece==0.2.2
-pandas==2.3.3
-tokenizers==0.19.1
-peft==0.20.0
-accelerate>=1.0.0
-sentencepiece==0.2.2
-protobuf>=4.0.0
-pandas>=2.0.0
+torch==2.5.1 
+transformers==4.44.2 
+peft==0.20.0 
+accelerate==1.14.0 
+datasets==5.0.1 
+tokenizers==0.19.1 
+safetensors==0.8.0 
+pandas==2.3.3 
+pyarrow==25.0.0 
+numpy==2.2.6 
+scipy==1.15.3 
+openpyxl==3.1.5 
+sacrebleu==2.4.3 
+sentencepiece==0.2.2 
+wandb==0.28.1
