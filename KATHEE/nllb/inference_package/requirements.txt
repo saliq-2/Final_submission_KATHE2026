@@ -3,7 +3,12 @@
 torch==2.5.1
 transformers==4.44.2
 peft==0.20.0
-accelerate==1.14.0
 safetensors==0.8.0
 sentencepiece==0.2.2
 pandas==2.3.3
+tokenizers==0.19.1
+peft==0.20.0
+accelerate>=1.0.0
+sentencepiece==0.2.2
+protobuf>=4.0.0
+pandas>=2.0.0

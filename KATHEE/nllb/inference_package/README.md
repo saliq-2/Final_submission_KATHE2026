@@ -25,7 +25,12 @@ inference_package/
     └── best_adapter_nllb_combined_3.3B/
 ```
 
-If you copy `translate.py` elsewhere, either bring the `adapters/` folder
+If you copy `translate.py` elsewhere, either bring the `adapters/`
+           python -u translate.py \
+            --input smoke.csv \
+            --output smoke_out.csv \
+            --adapter-dir /path_to_adapter \
+ folder
 along with it or pass `--adapter-dir /path/to/adapters` pointing at a
 directory containing both subfolders above. Each adapter folder is a
 standard PEFT LoRA checkpoint (`adapter_config.json` +
@@ -39,11 +44,7 @@ on first run.
 # Reproduces the submitted system (ensemble of both adapters)
 python translate.py --input dev.csv --output preds.csv
 
-# Cheaper: 1.3B adapter only, single beam-search pass
-python translate.py --input dev.csv --output preds.csv --mode single
 
-# Force CPU (slow, but works without a GPU)
-python translate.py --input dev.csv --output preds.csv --device cpu
 ```
 
 **Input**: a CSV with an `ID` column and a text column (default `sentence`,
@@ -57,18 +58,10 @@ override with `--text-column`).
   the two lists are pooled, every candidate is rescored under *both*
   models, and the length-normalised weighted-best candidate is kept. This
   is the system that was submitted.
-- `single`: 1.3B adapter only, top beam-search output. Much faster, no
-  scoring pass, small quality drop.
 
 ## Hardware
 
-Models are loaded one at a time and freed after use, so peak GPU memory is
-roughly that of the larger model alone: ~7 GB in fp16 for the 3.3B model,
-plus activation overhead. A 16 GB GPU runs the default settings
-comfortably; on smaller GPUs lower `--gen-batch-size` and
-`--score-batch-size`. On CPU, generation falls back to fp32 and is
-considerably slower — expect it mainly to be useful for smoke-testing on
-a handful of sentences.
+The enmsebled models need a gpu with a vram of atleast 24gb
 
 ## Other flags
 
