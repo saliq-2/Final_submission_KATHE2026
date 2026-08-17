@@ -17,7 +17,7 @@ Python 3.10, one CUDA GPU. Memory depends on which model you train:
 ```bash
 conda create -n kashmiri python=3.10 -y
 conda activate kashmiri
-pip install -r requirements.txt
+
 ```
 
 The `torch==2.5.1` / `peft==0.20.0` pin matters. On this pairing PEFT's DTensor
@@ -27,7 +27,7 @@ submodule explicitly to work around it. Upgrading torch to ≥2.6 or downgrading
 PEFT to <0.15 also resolves it.
 
 ## Layout
-
+KATHEE
 ```
 config.py                    shared paths and constants
 prepare_combined.py          builds the combined training mix
@@ -39,8 +39,9 @@ nllb/
   eval_nllb_nodiac.py        evaluation vs the reference set
   ensemble_nllb.py           tunes the ensemble weights
   make_dev_submission_ensemble.py   writes a submission CSV
+  inference_package/          final evaluation
   data/                      train_combined.parquet, val_combined.parquet
-  ckpt/                      adapters and checkpoints (created)
+  ckpt/                      adapters 
 work/                        intermediate parquets and outputs (created)
 ```
 
