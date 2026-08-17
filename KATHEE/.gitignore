@@ -1,4 +1,5 @@
-KATHEE/ckpt/combined_lora_1.3B/*
-KATHEE/ckpt/combined_lora_3.3B/*
-KATHEE/ckpt/best_adapter_nllb_combined_3.3B_10_epochs_best_one/*
-KATHEE/wandb/**
+nllb/ckpt/**
+nllb/wandb/**
+__pycache__/
+*.pyc
+.DS_Store
